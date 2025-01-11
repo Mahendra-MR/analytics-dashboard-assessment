@@ -1,0 +1,104 @@
+/* Container holding the table */
+.table-container {
+  margin: 0 auto;
+  padding: 20px;
+  max-width: 100%;
+  max-height: 80vh;
+  overflow: hidden;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  position: relative;
+  overflow-x: auto; /* Enable horizontal scrolling */
+}
+
+/* Table setup */
+.ev-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Ensure consistent column widths for both header and body */
+  min-width: 1200px; /* Set a minimum width for the table to allow scrolling */
+}
+
+/* Header (Fixed) */
+.ev-data-table thead {
+  display: block;
+  width: 100%;
+  background-color: #f7f7f7;
+  color: #333;
+  font-weight: 600;
+  position: sticky; /* Keep the header fixed at the top */
+  top: 0;
+  z-index: 1; /* Ensure header is above the body */
+}
+
+/* Body (Scrollable) */
+.ev-data-table tbody {
+  display: block;
+  max-height: 65vh; /* Adjust scroll area for vertical scrolling */
+  overflow-y: auto;
+  width: 100%;
+}
+
+/* Row styling */
+.ev-data-table tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+/* Header and Data Cell Styling */
+.ev-data-table th,
+.ev-data-table td {
+  padding: 16px 24px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+  border-right: 1px solid #e0e0e0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+/* Wider columns for specific fields (example) */
+.ev-data-table th:nth-child(2),
+.ev-data-table td:nth-child(2),
+.ev-data-table th:nth-child(9),
+.ev-data-table td:nth-child(9) {
+  min-width: 200px;
+}
+
+/* Remove the last column's right border */
+.ev-data-table th:last-child,
+.ev-data-table td:last-child {
+  border-right: none;
+}
+
+/* Row hover effect */
+.ev-data-table tbody tr:hover {
+  background-color: #d3e6ff;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+}
+
+/* Alternate row coloring */
+.ev-data-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.ev-data-table tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+/* Scrollbar Styling */
+.ev-data-table tbody::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ev-data-table tbody::-webkit-scrollbar-thumb {
+  background-color: #007bff;
+  border-radius: 5px;
+}
+
+.ev-data-table tbody::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
