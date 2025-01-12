@@ -16,7 +16,7 @@
 .ev-data-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed; /* Ensure consistent column widths for both header and body */
+  table-layout: fixed; /* Ensure consistent column widths */
   min-width: 1200px; /* Set a minimum width for the table to allow scrolling */
 }
 
@@ -30,6 +30,20 @@
   position: sticky; /* Keep the header fixed at the top */
   top: 0;
   z-index: 1; /* Ensure header is above the body */
+}
+
+/* Sub-Header Styling */
+.ev-data-table thead tr:nth-child(2) th {
+  padding: 12px 16px; /* Adjusted padding for header */
+  background-color: #f1f1f1;
+  font-size: 1rem; /* Slightly larger font size for better readability */
+  text-align: center;
+  word-wrap: break-word; /* Allow long text to wrap */
+}
+
+/* Table Header Row Styling */
+.ev-data-table thead tr {
+  height: 60px; /* Increased height of the header row */
 }
 
 /* Body (Scrollable) */
@@ -50,7 +64,7 @@
 /* Header and Data Cell Styling */
 .ev-data-table th,
 .ev-data-table td {
-  padding: 16px 24px;
+  padding: 16px 24px; /* Increased padding for better spacing */
   text-align: left;
   border-bottom: 1px solid #e0e0e0;
   border-right: 1px solid #e0e0e0;
@@ -58,14 +72,58 @@
   overflow: hidden;
   text-overflow: ellipsis;
   box-sizing: border-box;
+  word-wrap: break-word; /* Allow long text to wrap */
 }
 
-/* Wider columns for specific fields (example) */
+/* Individual column width adjustments */
+.ev-data-table th:nth-child(1),
+.ev-data-table td:nth-child(1) {
+  min-width: 150px; /* VIN (1-10) */
+}
+
 .ev-data-table th:nth-child(2),
-.ev-data-table td:nth-child(2),
+.ev-data-table td:nth-child(2) {
+  min-width: 180px; /* County */
+}
+
+.ev-data-table th:nth-child(3),
+.ev-data-table td:nth-child(3) {
+  min-width: 120px; /* City */
+}
+
+.ev-data-table th:nth-child(4),
+.ev-data-table td:nth-child(4) {
+  min-width: 100px; /* State */
+}
+
+.ev-data-table th:nth-child(5),
+.ev-data-table td:nth-child(5) {
+  min-width: 120px; /* Postal Code */
+}
+
+.ev-data-table th:nth-child(6),
+.ev-data-table td:nth-child(6) {
+  min-width: 120px; /* Model Year */
+}
+
+.ev-data-table th:nth-child(7),
+.ev-data-table td:nth-child(7) {
+  min-width: 120px; /* Make */
+}
+
+.ev-data-table th:nth-child(8),
+.ev-data-table td:nth-child(8) {
+  min-width: 120px; /* Model */
+}
+
 .ev-data-table th:nth-child(9),
 .ev-data-table td:nth-child(9) {
-  min-width: 200px;
+  min-width: 180px; /* Electric Vehicle Type */
+}
+
+.ev-data-table th:nth-child(10),
+.ev-data-table td:nth-child(10) {
+  min-width: 180px; /* CAFV Eligibility */
 }
 
 /* Remove the last column's right border */
@@ -101,4 +159,128 @@
 
 .ev-data-table tbody::-webkit-scrollbar-track {
   background-color: #f1f1f1;
+}
+/* Header Cell Styling */
+.ev-data-table th {
+  position: relative; /* Needed for the pseudo-element */
+  background-color: #f7f7f7;
+  color: #333;
+  font-weight: 600;
+  padding: 16px 24px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+  border-right: 1px solid #e0e0e0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+/* Triangle design in the top-right corner */
+.ev-data-table th::before {
+  content: '';
+  position: absolute;
+  top: 8px;  /* Adjust vertical position */
+  right: 8px; /* Adjust horizontal position */
+  width: 0;
+  height: 0;
+  border-top: 10px solid #007bff; /* Triangle color */
+  border-left: 10px solid transparent; /* Triangle shape */
+}
+/* Popup for sorting */
+.sort-popup {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 12px 16px;
+  z-index: 1000;
+  width: 180px;
+  max-width: 250px;
+  margin-top: -10px;  /* Added margin to adjust positioning */
+}
+
+/* Add a bit of space around the popup */
+.sort-popup button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background-color: #fff;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.sort-popup button:hover {
+  background-color: #f0f0f0;
+}
+
+.search-input {
+  margin-top: 10px;
+  padding: 5px;
+  width: 180px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+/* Add styling for the buttons container */
+.popup-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+/* General button styling */
+.popup-buttons button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  width: 45%; /* Make buttons take equal width */
+}
+
+/* Reset Button - Red Color */
+.popup-buttons .reset-button {
+  background-color: #e74c3c;  /* Red */
+  color: white;
+}
+
+.popup-buttons .reset-button:hover {
+  background-color: #c0392b;  /* Darker red on hover */
+  transform: scale(1.05); /* Slight zoom effect */
+}
+
+/* Apply Button - Blue Color */
+.popup-buttons .apply-button {
+  background-color: #3498db;  /* Blue */
+  color: white;
+}
+
+.popup-buttons .apply-button:hover {
+  background-color: #2980b9;  /* Darker blue on hover */
+  transform: scale(1.05); /* Slight zoom effect */
+}
+
+/* Optional: Add a box shadow to the buttons */
+.popup-buttons button {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.popup-buttons button:active {
+  transform: scale(0.98); /* Add active state for clicking */
+}
+
+
+/* Loading styles */
+.loading {
+  text-align: center;
+  padding: 10px;
+  font-size: 14px;
+  color: #555;
 }

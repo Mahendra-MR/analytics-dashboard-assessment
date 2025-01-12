@@ -1,19 +1,23 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import './EVDataTable.css';
 
 const EVDataTable = ({ evData, loading, fetchMoreData, hasMore }) => {
-  const observer = useRef();
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
+  const [filterPopup, setFilterPopup] = useState({ visible: false, x: 0, y: 0, column: '' });
+  const [searchText, setSearchText] = useState(''); // State to store search input
 
-  // Infinite Scroll Observer for the last row
+  const observer = useRef();
+  const headerRefs = useRef([]);
+  const popupRef = useRef(null);  // To refer to the popup itself
+
   const lastRowRef = useCallback(
     (node) => {
       if (loading) return;
-
       if (observer.current) observer.current.disconnect();
 
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore) {
-          fetchMoreData();  // Load more data when the last row is visible
+          fetchMoreData();
         }
       });
 
@@ -22,78 +26,143 @@ const EVDataTable = ({ evData, loading, fetchMoreData, hasMore }) => {
     [loading, hasMore, fetchMoreData]
   );
 
+  const handleSort = (key, direction) => {
+    setSortConfig({ key, direction });
+    setFilterPopup({ ...filterPopup, visible: false });
+  };
+
+  const handleSearch = (event) => {
+    setSearchText(event.target.value); // Update search text
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      // Close the popup when Enter is pressed
+      closePopup();
+    }
+  };
+
+  // Filter and sort data based on search and sort configuration
+  const filteredAndSortedData = React.useMemo(() => {
+    let filteredData = evData;
+    if (searchText) {
+      filteredData = evData.filter(row =>
+        Object.values(row).some(value => 
+          value.toString().toLowerCase().includes(searchText.toLowerCase())
+        )
+      );
+    }
+
+    if (sortConfig.key) {
+      filteredData = filteredData.sort((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === 'ascending' ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === 'ascending' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+
+    return filteredData;
+  }, [evData, sortConfig, searchText]);
+
+  const showFilterPopup = (event, column, index) => {
+    event.stopPropagation();
+    const headerRect = headerRefs.current[index].getBoundingClientRect();
+    const popupHeight = 450;  // Set an estimated height for the popup
+  
+    setFilterPopup({
+      visible: true, // Ensure the popup is visible whenever clicked
+      x: headerRect.right - 210,  // Adjust the horizontal position if needed
+      y: headerRect.top - popupHeight,  // Position the popup above the header
+      column,
+    });
+  };
+
+  const closePopup = () => setFilterPopup({ ...filterPopup, visible: false });
+
+  // Add event listener to close the popup if clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (popupRef.current && !popupRef.current.contains(event.target)) {
+        closePopup();
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
+  // Reset sorting and filtering
+  const resetFilters = () => {
+    setSortConfig({ key: null, direction: null });
+    setSearchText('');
+    setFilterPopup({ ...filterPopup, visible: false });
+  };
+
+  // Apply filters (search)
+  const applyFilters = () => {
+    setFilterPopup({ ...filterPopup, visible: false });
+  };
+
+  const headers = [
+    'VIN (1-10)',
+    'County',
+    'City',
+    'State',
+    'Postal Code',
+    'Model Year',
+    'Make',
+    'Model',
+    'Electric Vehicle Type',
+    'Clean Alternative Fuel Vehicle (CAFV) Eligibility'
+  ];
+
   return (
     <div className="table-container">
       <table className="ev-data-table">
         <thead>
           <tr>
-            <th>Index</th>
-            <th>VIN (1-10)</th>
-            <th>County</th>
-            <th>City</th>
-            <th>State</th>
-            <th>Postal Code</th>
-            <th>Model Year</th>
-            <th>Make</th>
-            <th>Model</th>
-            <th>Electric Vehicle Type</th>
-            <th>CAFV Eligibility</th>
-            <th>Electric Range</th>
-            <th>Base MSRP</th>
-            <th>Legislative District</th>
-            <th>DOL Vehicle ID</th>
-            <th>Vehicle Location</th>
-            <th>Electric Utility</th>
-            <th>2020 Census Tract</th>
+            {headers.map((header, index) => (
+              <th
+                key={index}
+                ref={(el) => (headerRefs.current[index] = el)}
+                onClick={(e) => {
+                  // Ensure popup is visible when a column is clicked
+                  setFilterPopup({ ...filterPopup, visible: true }); // Force popup to show
+                  showFilterPopup(e, header, index);
+                }}
+                className="sortable-column"
+              >
+                {header}
+                <span className="sort-icon">
+                  {sortConfig.key === header && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
+                </span>
+              </th>
+            ))}
           </tr>
         </thead>
-
         <tbody>
-          {evData.map((row, index) => {
-            if (index === evData.length - 1) {
+          {filteredAndSortedData.map((row, index) => {
+            if (index === filteredAndSortedData.length - 1) {
               return (
                 <tr ref={lastRowRef} key={index}>
-                  <td>{index + 1}</td>
-                  <td>{row['VIN (1-10)']}</td>
-                  <td>{row['County']}</td>
-                  <td>{row['City']}</td>
-                  <td>{row['State']}</td>
-                  <td>{row['Postal Code']}</td>
-                  <td>{row['Model Year']}</td>
-                  <td>{row['Make']}</td>
-                  <td>{row['Model']}</td>
-                  <td>{row['Electric Vehicle Type']}</td>
-                  <td>{row['Clean Alternative Fuel Vehicle (CAFV) Eligibility']}</td>
-                  <td>{row['Electric Range']}</td>
-                  <td>{row['Base MSRP']}</td>
-                  <td>{row['Legislative District']}</td>
-                  <td>{row['DOL Vehicle ID']}</td>
-                  <td>{row['Vehicle Location']}</td>
-                  <td>{row['Electric Utility']}</td>
-                  <td>{row['2020 Census Tract']}</td>
+                  {headers.map((header, idx) => (
+                    <td key={idx}>{row[header]}</td>
+                  ))}
                 </tr>
               );
             } else {
               return (
                 <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{row['VIN (1-10)']}</td>
-                  <td>{row['County']}</td>
-                  <td>{row['City']}</td>
-                  <td>{row['State']}</td>
-                  <td>{row['Postal Code']}</td>
-                  <td>{row['Model Year']}</td>
-                  <td>{row['Make']}</td>
-                  <td>{row['Model']}</td>
-                  <td>{row['Electric Vehicle Type']}</td>
-                  <td>{row['Clean Alternative Fuel Vehicle (CAFV) Eligibility']}</td>
-                  <td>{row['Electric Range']}</td>
-                  <td>{row['Base MSRP']}</td>
-                  <td>{row['Legislative District']}</td>
-                  <td>{row['DOL Vehicle ID']}</td>
-                  <td>{row['Vehicle Location']}</td>
-                  <td>{row['Electric Utility']}</td>
-                  <td>{row['2020 Census Tract']}</td>
+                  {headers.map((header, idx) => (
+                    <td key={idx}>{row[header]}</td>
+                  ))}
                 </tr>
               );
             }
@@ -101,7 +170,38 @@ const EVDataTable = ({ evData, loading, fetchMoreData, hasMore }) => {
         </tbody>
       </table>
 
-      {/* Loading Indicator */}
+      {filterPopup.visible && (
+        <div
+          className="sort-popup"
+          style={{
+            top: filterPopup.y + window.scrollY, // Adding scrollY to adjust popup positioning
+            left: filterPopup.x,
+          }}
+          onClick={(e) => e.stopPropagation()}  // Prevent the popup from closing if clicked inside
+          ref={popupRef}  // Set reference to the popup
+        >
+          <button onClick={() => handleSort(filterPopup.column, 'ascending')}>⬆ Sort Ascending</button>
+          <button onClick={() => handleSort(filterPopup.column, 'descending')}>⬇ Sort Descending</button>
+
+          {/* Search bar added below the sort buttons */}
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchText}
+            onChange={handleSearch}
+            onKeyDown={handleKeyDown}  // Add onKeyDown event handler to listen for Enter key
+            className="search-input"
+          />
+
+          {/* Reset and Apply buttons */}
+<div className="popup-buttons">
+  <button className="reset-button" onClick={resetFilters}>Reset</button>
+  <button className="apply-button" onClick={applyFilters}>Apply</button>
+</div>
+
+        </div>
+      )}
+
       {loading && <div className="loading">Loading more data...</div>}
       {!hasMore && !loading && <div className="loading">All data loaded</div>}
     </div>
