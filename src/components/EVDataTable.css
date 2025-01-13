@@ -17,7 +17,7 @@
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed; /* Ensure consistent column widths */
-  min-width: 1200px; /* Set a minimum width for the table to allow scrolling */
+  min-width: 1400px; /* Increased minimum width for the table to show all content */
 }
 
 /* Header (Fixed) */
@@ -34,7 +34,7 @@
 
 /* Sub-Header Styling */
 .ev-data-table thead tr:nth-child(2) th {
-  padding: 12px 16px; /* Adjusted padding for header */
+  padding: 16px 24px; /* Increased padding for header */
   background-color: #f1f1f1;
   font-size: 1rem; /* Slightly larger font size for better readability */
   text-align: center;
@@ -78,52 +78,52 @@
 /* Individual column width adjustments */
 .ev-data-table th:nth-child(1),
 .ev-data-table td:nth-child(1) {
-  min-width: 150px; /* VIN (1-10) */
+  min-width: 180px; /* VIN (1-10) */
 }
 
 .ev-data-table th:nth-child(2),
 .ev-data-table td:nth-child(2) {
-  min-width: 180px; /* County */
+  min-width: 250px; /* County */
 }
 
 .ev-data-table th:nth-child(3),
 .ev-data-table td:nth-child(3) {
-  min-width: 120px; /* City */
+  min-width: 180px; /* City */
 }
 
 .ev-data-table th:nth-child(4),
 .ev-data-table td:nth-child(4) {
-  min-width: 100px; /* State */
+  min-width: 150px; /* State */
 }
 
 .ev-data-table th:nth-child(5),
 .ev-data-table td:nth-child(5) {
-  min-width: 120px; /* Postal Code */
+  min-width: 180px; /* Postal Code */
 }
 
 .ev-data-table th:nth-child(6),
 .ev-data-table td:nth-child(6) {
-  min-width: 120px; /* Model Year */
+  min-width: 180px; /* Model Year */
 }
 
 .ev-data-table th:nth-child(7),
 .ev-data-table td:nth-child(7) {
-  min-width: 120px; /* Make */
+  min-width: 180px; /* Make */
 }
 
 .ev-data-table th:nth-child(8),
 .ev-data-table td:nth-child(8) {
-  min-width: 120px; /* Model */
+  min-width: 180px; /* Model */
 }
 
 .ev-data-table th:nth-child(9),
 .ev-data-table td:nth-child(9) {
-  min-width: 180px; /* Electric Vehicle Type */
+  min-width: 250px; /* Electric Vehicle Type */
 }
 
 .ev-data-table th:nth-child(10),
 .ev-data-table td:nth-child(10) {
-  min-width: 180px; /* CAFV Eligibility */
+  min-width: 250px; /* CAFV Eligibility */
 }
 
 /* Remove the last column's right border */
@@ -160,6 +160,7 @@
 .ev-data-table tbody::-webkit-scrollbar-track {
   background-color: #f1f1f1;
 }
+
 /* Header Cell Styling */
 .ev-data-table th {
   position: relative; /* Needed for the pseudo-element */
@@ -176,7 +177,7 @@
   box-sizing: border-box;
 }
 
-/* Triangle design in the top-right corner */
+/* Triangle design in the top-right corner for header */
 .ev-data-table th::before {
   content: '';
   position: absolute;
@@ -187,6 +188,17 @@
   border-top: 10px solid #007bff; /* Triangle color */
   border-left: 10px solid transparent; /* Triangle shape */
 }
+
+/* Remove Triangle Design for Summary Row Header Cells */
+.ev-data-table th.summary-row::before {
+  content: none; /* Remove triangle design */
+}
+
+/* Remove triangle design for summary card cells */
+.summary-card .card-cell::before {
+  content: none; /* Remove triangle design */
+}
+
 /* Popup for sorting */
 .sort-popup {
   position: absolute;
@@ -264,23 +276,29 @@
 
 .popup-buttons .apply-button:hover {
   background-color: #2980b9;  /* Darker blue on hover */
-  transform: scale(1.05); /* Slight zoom effect */
+  transform: scale(1.05);
 }
 
-/* Optional: Add a box shadow to the buttons */
-.popup-buttons button {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.popup-buttons button:active {
-  transform: scale(0.98); /* Add active state for clicking */
-}
-
-
-/* Loading styles */
+/* Loading state */
 .loading {
-  text-align: center;
-  padding: 10px;
-  font-size: 14px;
-  color: #555;
+  position: absolute;
+  top: 120%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 16px;
+  color: #007bff;
+  font-weight: bold;
+}
+
+/* Updated summary card cell styles */
+.summary-card .card-cell {
+  padding: 70px 80px; /* Increased padding for more space inside each card cell */
+  margin: 15px 0; /* Added margin between cells for spacing */
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  word-wrap: break-word;
+  white-space: normal; /* Allow text to wrap inside the cell */
+  overflow: hidden;
+  min-height: 150px; /* Increased minimum height for more space */
 }

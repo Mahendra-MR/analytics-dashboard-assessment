@@ -1,14 +1,15 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import './EVDataTable.css';
+import { getSummaryData } from './generateSummaryData';
 
 const EVDataTable = ({ evData, loading, fetchMoreData, hasMore }) => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [filterPopup, setFilterPopup] = useState({ visible: false, x: 0, y: 0, column: '' });
-  const [searchText, setSearchText] = useState(''); // State to store search input
+  const [searchText, setSearchText] = useState('');
 
   const observer = useRef();
   const headerRefs = useRef([]);
-  const popupRef = useRef(null);  // To refer to the popup itself
+  const popupRef = useRef(null);
 
   const lastRowRef = useCallback(
     (node) => {
@@ -32,22 +33,20 @@ const EVDataTable = ({ evData, loading, fetchMoreData, hasMore }) => {
   };
 
   const handleSearch = (event) => {
-    setSearchText(event.target.value); // Update search text
+    setSearchText(event.target.value);
   };
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      // Close the popup when Enter is pressed
       closePopup();
     }
   };
 
-  // Filter and sort data based on search and sort configuration
   const filteredAndSortedData = React.useMemo(() => {
     let filteredData = evData;
     if (searchText) {
       filteredData = evData.filter(row =>
-        Object.values(row).some(value => 
+        Object.values(row).some(value =>
           value.toString().toLowerCase().includes(searchText.toLowerCase())
         )
       );
@@ -71,19 +70,18 @@ const EVDataTable = ({ evData, loading, fetchMoreData, hasMore }) => {
   const showFilterPopup = (event, column, index) => {
     event.stopPropagation();
     const headerRect = headerRefs.current[index].getBoundingClientRect();
-    const popupHeight = 450;  // Set an estimated height for the popup
-  
+    const popupHeight = 450;
+
     setFilterPopup({
-      visible: true, // Ensure the popup is visible whenever clicked
-      x: headerRect.right - 210,  // Adjust the horizontal position if needed
-      y: headerRect.top - popupHeight,  // Position the popup above the header
+      visible: true,
+      x: headerRect.right - 210,
+      y: headerRect.top - popupHeight,
       column,
     });
   };
 
   const closePopup = () => setFilterPopup({ ...filterPopup, visible: false });
 
-  // Add event listener to close the popup if clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
@@ -92,34 +90,22 @@ const EVDataTable = ({ evData, loading, fetchMoreData, hasMore }) => {
     };
 
     document.addEventListener('click', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
+    return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
-  // Reset sorting and filtering
   const resetFilters = () => {
     setSortConfig({ key: null, direction: null });
     setSearchText('');
     setFilterPopup({ ...filterPopup, visible: false });
   };
 
-  // Apply filters (search)
   const applyFilters = () => {
     setFilterPopup({ ...filterPopup, visible: false });
   };
 
   const headers = [
-    'VIN (1-10)',
-    'County',
-    'City',
-    'State',
-    'Postal Code',
-    'Model Year',
-    'Make',
-    'Model',
-    'Electric Vehicle Type',
+    'VIN (1-10)', 'County', 'City', 'State', 'Postal Code',
+    'Model Year', 'Make', 'Model', 'Electric Vehicle Type',
     'Clean Alternative Fuel Vehicle (CAFV) Eligibility'
   ];
 
@@ -127,14 +113,14 @@ const EVDataTable = ({ evData, loading, fetchMoreData, hasMore }) => {
     <div className="table-container">
       <table className="ev-data-table">
         <thead>
+          {/* First Row: Column Headers */}
           <tr>
             {headers.map((header, index) => (
               <th
                 key={index}
                 ref={(el) => (headerRefs.current[index] = el)}
                 onClick={(e) => {
-                  // Ensure popup is visible when a column is clicked
-                  setFilterPopup({ ...filterPopup, visible: true }); // Force popup to show
+                  setFilterPopup({ ...filterPopup, visible: true });
                   showFilterPopup(e, header, index);
                 }}
                 className="sortable-column"
@@ -146,26 +132,26 @@ const EVDataTable = ({ evData, loading, fetchMoreData, hasMore }) => {
               </th>
             ))}
           </tr>
+
+          {/* Second Row: Summary Data */}
+          <tr>
+            {headers.map((header, index) => (
+              <th key={`summary-${index}`} className="summary-row">
+                {/* Always use the full dataset for summary calculation */}
+                {getSummaryData(evData, header)} 
+              </th>
+            ))}
+          </tr>
         </thead>
+
         <tbody>
           {filteredAndSortedData.map((row, index) => {
-            if (index === filteredAndSortedData.length - 1) {
-              return (
-                <tr ref={lastRowRef} key={index}>
-                  {headers.map((header, idx) => (
-                    <td key={idx}>{row[header]}</td>
-                  ))}
-                </tr>
-              );
-            } else {
-              return (
-                <tr key={index}>
-                  {headers.map((header, idx) => (
-                    <td key={idx}>{row[header]}</td>
-                  ))}
-                </tr>
-              );
-            }
+            const isLastRow = index === filteredAndSortedData.length - 1;
+            return (
+              <tr ref={isLastRow ? lastRowRef : null} key={index}>
+                {headers.map((header, idx) => <td key={idx}>{row[header]}</td>)}
+              </tr>
+            );
           })}
         </tbody>
       </table>
@@ -173,32 +159,26 @@ const EVDataTable = ({ evData, loading, fetchMoreData, hasMore }) => {
       {filterPopup.visible && (
         <div
           className="sort-popup"
-          style={{
-            top: filterPopup.y + window.scrollY, // Adding scrollY to adjust popup positioning
-            left: filterPopup.x,
-          }}
-          onClick={(e) => e.stopPropagation()}  // Prevent the popup from closing if clicked inside
-          ref={popupRef}  // Set reference to the popup
+          style={{ top: filterPopup.y + window.scrollY, left: filterPopup.x }}
+          onClick={(e) => e.stopPropagation()}
+          ref={popupRef}
         >
           <button onClick={() => handleSort(filterPopup.column, 'ascending')}>⬆ Sort Ascending</button>
           <button onClick={() => handleSort(filterPopup.column, 'descending')}>⬇ Sort Descending</button>
 
-          {/* Search bar added below the sort buttons */}
           <input
             type="text"
             placeholder="Search..."
             value={searchText}
             onChange={handleSearch}
-            onKeyDown={handleKeyDown}  // Add onKeyDown event handler to listen for Enter key
+            onKeyDown={handleKeyDown}
             className="search-input"
           />
 
-          {/* Reset and Apply buttons */}
-<div className="popup-buttons">
-  <button className="reset-button" onClick={resetFilters}>Reset</button>
-  <button className="apply-button" onClick={applyFilters}>Apply</button>
-</div>
-
+          <div className="popup-buttons">
+            <button className="reset-button" onClick={resetFilters}>Reset</button>
+            <button className="apply-button" onClick={applyFilters}>Apply</button>
+          </div>
         </div>
       )}
 
