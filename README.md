@@ -1,45 +1,81 @@
-# MapUp - Analytics Dashboard Assessment
+# MapUp Analytics Dashboard Frontend Assessment
 
-## Overview
+## Electric Vehicle Population Dashboard.
 
-The objective of this assessment is to analyze the provided Electric Vehicle (EV) population data and create a frontend dashboard that visualizes key insights about the dataset. This repository contains the necessary data and instructions for you to demonstrate your analytical and dashboard creation skills. Feel free to use any tech stack you want to create the dashboard.
+### Overview
 
-## Dataset
+This project is an Electric Vehicle Population Dashboard that visualizes and analyzes a dataset of electric vehicle population in the United States. It provides insights into various attributes of electric vehicles, such as VIN, model year, county, city, and eligibility for clean alternative fuel vehicle (CAFV) programs. The project uses React, Chart.js, and PapaParse for data processing and visualization.
 
-The Electric Vehicle Population dataset is available in the [Electric Vehicle Population Data (CSV)](./data-to-visualize/Electric_Vehicle_Population_Data.csv) within this repository, for more information about the dataset visit [kaggle dataset](https://www.kaggle.com/datasets/willianoliveiragibin/electric-vehicle-population).
+### Features
 
-**Note:** We've reduced the dataset in the repository to keep the data size small in the frontend bundle.
+- **CSV Data Parsing**: The data is fetched and parsed from a CSV file using PapaParse.
+- **Data Table**: A table is used to display vehicle data with sorting and filtering capabilities.
+- **Responsive Layout**: The dashboard is responsive and works well on different screen sizes.
+- **Search Functionality**: A search bar allows users to filter the data by keywords.
+- **Infinite Scroll**: More data is loaded as the user scrolls down the table.
 
-## Tasks
+### Requirements
 
-### Dashboard Creation:
+Before running the project, ensure you have the following installed:
 
-- Create a frontend dashboard that presents key insights from the dataset.
-- Design the dashboard to effectively communicate important metrics and visualizations.
-- Include visual representations such as charts, graphs, or tables to showcase trends and relationships in the data.
-- Ensure the dashboard is user-friendly and intuitive for exploring the dataset.
+- **Node.js** (LTS version recommended)
+- **npm** (comes with Node.js)
 
-### Deployment:
+### Getting Started
 
-- Deploy your frontend dashboard to a hosting platform of your choice.
-- Make sure the dashboard is publicly accessible.
+1. Clone this repository to your local machine:
+    ```bash
+    git clone https://github.com/Mahendra-MR/analytics-dashboard-assessment.git
+    ```
 
-## Evaluation Criteria
+2. Navigate to the project directory:
+    ```bash
+    cd analytics-dashboard-assessment
+    ```
 
-Your submission will be evaluated based on:
+3. Install the project dependencies:
+    ```bash
+    npm install
+    ```
 
-- **Analytical Depth:** The depth of your analysis and insights derived from the dataset.
-- **Dashboard Design:** Clarity, aesthetics, and usability of the frontend dashboard.
-- **Insightfulness:** Effectiveness in conveying key insights about electric vehicles.
+### Usage
 
-## Submission Guidelines
+1. After installation, start the development server:
+    ```bash
+    npm run dev
+    ```
 
-- Fork this repository to your GitHub account.
-- Complete your analysis and create the frontend dashboard.
-- Deploy the dashboard to a hosting platform.
-- Update this [README.md](README.md) file with the URL to your live dashboard.
-- **Repository Access:** Keep your repository private to avoid visibility by other candidates. Add the following email addresses as collaborators to the repository, these are our internal emails and will be evaluating your assessment:
-  - vedantp@mapup.ai
-  - ajayap@mapupa.ai
-  - divyanshs@mapup.ai
-- Finally, please fill out the google form that you received via email to submit the assessment for review.
+2. Open `http://localhost:5173` in your browser to view the Electric Vehicle Population Data Dashboard.
+
+### Project Details
+
+This dashboard reads the dataset from the `Electric_Vehicle_Population_Data.csv` file. The focus is on providing an easy-to-understand comparison of the data.
+
+
+#### Functionalities
+
+- **Data Import**: The dashboard loads data from the provided CSV file and processes it for visualization.
+- **Bar Graph Rendering**: Bar graphs are dynamically created using the data to show vehicle population by various parameters.
+
+
+### Data Rendering
+
+The Electric Vehicle Population Data is dynamically loaded and rendered in the dashboard. Initially, a small portion of the dataset is displayed, and as the user interacts with the page (e.g., by scrolling), more data is progressively rendered. This technique, often referred to as lazy loading or infinite scrolling, helps improve performance by minimizing the initial load time and reducing memory consumption.
+
+#### How it Works:
+
+- **Initial Data Load**: When the application starts, only a few lines of data are rendered, ensuring a quick initial load.
+- **Progressive Rendering**: As the user scrolls or interacts with the page, additional data is fetched and rendered incrementally. This creates a smooth experience without overwhelming the user or the browser.
+- **Efficient Data Handling**: This approach reduces the strain on the browser and allows the dashboard to handle large datasets without performance degradation.
+
+This progressive rendering approach ensures that the dashboard remains responsive even with large volumes of data.
+
+### Technologies Used
+
+- **React**: JavaScript library for building user interfaces.
+- **CSV Parser**: To parse and import the dataset into the app.
+
+
+### Project Assessment Overview
+
+This project serves as an assessment for the MapUp Analytics Dashboard Frontend, showcasing the ability to visualize and interact with large datasets. It demonstrates skills in data parsing, dynamic rendering, and creating responsive, user-friendly dashboards
