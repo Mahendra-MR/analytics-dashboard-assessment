@@ -1,58 +1,27 @@
-/* Make the root container responsive */
 #root {
-  max-width: 100%; /* Ensure it doesn't exceed the screen width */
+  max-width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
   box-sizing: border-box;
   width: 100%;
-  overflow-x: auto; /* Allow horizontal scrolling if necessary */
-  background-color: #FF5733; /* Light grey background */
+  overflow-x: auto;
+  background-color: #FF5733;
 }
 
-/* Adjust the root to be fully mobile-friendly */
 body {
   margin: 0;
   padding: 0;
   width: 100%;
   font-family: Arial, sans-serif;
-  overflow-x: auto; /* Ensure horizontal scrolling when content overflows */
-  background-color: #FF5733; /* Light grey background */
+  overflow-x: auto; 
+  background-color: #FF5733;
 }
 
-/* Pagination controls styling */
-.pagination-controls {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.pagination-controls button {
-  padding: 8px 16px;
-  background-color: #1a73e8;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.pagination-controls button:hover {
-  background-color: #0f5bb5;
-}
-
-.pagination-controls button:disabled {
-  background-color: #d3d3d3;
-  cursor: not-allowed;
-}
 
 /* Mobile optimization */
 @media (max-width: 768px) {
   #root {
     padding: 1rem;
-  }
-
-  .pagination-controls button {
-    padding: 6px 12px;
   }
 }

@@ -72,12 +72,16 @@ const EVDataTable = ({ evData, loading, fetchMoreData, hasMore }) => {
     const headerRect = headerRefs.current[index].getBoundingClientRect();
     const popupHeight = 450;
 
-    setFilterPopup({
-      visible: true,
-      x: headerRect.right - 210,
-      y: headerRect.top - popupHeight,
-      column,
-    });
+    if (filterPopup.visible && filterPopup.column === column) {
+      closePopup();
+    } else {
+      setFilterPopup({
+        visible: true,
+        x: headerRect.right - 210,
+        y: headerRect.top - popupHeight,
+        column,
+      });
+    }
   };
 
   const closePopup = () => setFilterPopup({ ...filterPopup, visible: false });
@@ -119,10 +123,7 @@ const EVDataTable = ({ evData, loading, fetchMoreData, hasMore }) => {
               <th
                 key={index}
                 ref={(el) => (headerRefs.current[index] = el)}
-                onClick={(e) => {
-                  setFilterPopup({ ...filterPopup, visible: true });
-                  showFilterPopup(e, header, index);
-                }}
+                onClick={(e) => showFilterPopup(e, header, index)}
                 className="sortable-column"
               >
                 {header}
@@ -137,7 +138,6 @@ const EVDataTable = ({ evData, loading, fetchMoreData, hasMore }) => {
           <tr>
             {headers.map((header, index) => (
               <th key={`summary-${index}`} className="summary-row">
-                {/* Always use the full dataset for summary calculation */}
                 {getSummaryData(evData, header)} 
               </th>
             ))}

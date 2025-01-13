@@ -1,23 +1,22 @@
-/* Container holding the table */
 .table-container {
   margin: 0 auto;
-  padding: 20px;
-  max-width: 100%;
-  max-height: 80vh;
+  padding: 100px;
+  max-width: 95%; 
+  height: calc(100vh - 40px);
   overflow: hidden;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 8px;
-  position: relative;
-  overflow-x: auto; /* Enable horizontal scrolling */
+  position: fixed;
+  overflow-x: auto; 
 }
 
 /* Table setup */
 .ev-data-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed; /* Ensure consistent column widths */
-  min-width: 1400px; /* Increased minimum width for the table to show all content */
+  table-layout: auto; 
+  min-width: 1700px; 
 }
 
 /* Header (Fixed) */
@@ -27,29 +26,30 @@
   background-color: #f7f7f7;
   color: #333;
   font-weight: 600;
-  position: sticky; /* Keep the header fixed at the top */
+  position: sticky; 
   top: 0;
-  z-index: 1; /* Ensure header is above the body */
-}
-
-/* Sub-Header Styling */
-.ev-data-table thead tr:nth-child(2) th {
-  padding: 16px 24px; /* Increased padding for header */
-  background-color: #f1f1f1;
-  font-size: 1rem; /* Slightly larger font size for better readability */
-  text-align: center;
-  word-wrap: break-word; /* Allow long text to wrap */
+  z-index: 1; 
+  font-size: 20px; 
 }
 
 /* Table Header Row Styling */
 .ev-data-table thead tr {
-  height: 60px; /* Increased height of the header row */
+  height: 90px; 
+}
+
+/* Sub-Header Styling */
+.ev-data-table thead tr:nth-child(2) th {
+  padding: 16px 24px; 
+  background-color: #f1f1f1;
+  font-size: 1rem; 
+  text-align: left;
+  word-wrap: break-word; 
 }
 
 /* Body (Scrollable) */
 .ev-data-table tbody {
   display: block;
-  max-height: 65vh; /* Adjust scroll area for vertical scrolling */
+  max-height: 65vh; 
   overflow-y: auto;
   width: 100%;
 }
@@ -61,69 +61,75 @@
   table-layout: fixed;
 }
 
-/* Header and Data Cell Styling */
-.ev-data-table th,
+/* Balanced solution for full content visibility */
 .ev-data-table td {
-  padding: 16px 24px; /* Increased padding for better spacing */
+  padding: 25px 35px;
+  font-size: 17px; 
   text-align: left;
   border-bottom: 1px solid #e0e0e0;
   border-right: 1px solid #e0e0e0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow: visible;
+  word-wrap: break-word;
   box-sizing: border-box;
-  word-wrap: break-word; /* Allow long text to wrap */
+  min-height: 110px;
 }
+
+/* Expand table width */
+.ev-data-table {
+  min-width: 1900px;
+}
+
 
 /* Individual column width adjustments */
 .ev-data-table th:nth-child(1),
 .ev-data-table td:nth-child(1) {
-  min-width: 180px; /* VIN (1-10) */
+  min-width: 200px; /* VIN (1-10) */
 }
 
 .ev-data-table th:nth-child(2),
 .ev-data-table td:nth-child(2) {
-  min-width: 250px; /* County */
+  min-width: 280px; /* County */
 }
 
 .ev-data-table th:nth-child(3),
 .ev-data-table td:nth-child(3) {
-  min-width: 180px; /* City */
+  min-width: 200px; /* City */
 }
 
 .ev-data-table th:nth-child(4),
 .ev-data-table td:nth-child(4) {
-  min-width: 150px; /* State */
+  min-width: 180px; /* State */
 }
 
 .ev-data-table th:nth-child(5),
 .ev-data-table td:nth-child(5) {
-  min-width: 180px; /* Postal Code */
+  min-width: 200px; /* Postal Code */
 }
 
 .ev-data-table th:nth-child(6),
 .ev-data-table td:nth-child(6) {
-  min-width: 180px; /* Model Year */
+  min-width: 200px; /* Model Year */
 }
 
 .ev-data-table th:nth-child(7),
 .ev-data-table td:nth-child(7) {
-  min-width: 180px; /* Make */
+  min-width: 200px; /* Make */
 }
 
 .ev-data-table th:nth-child(8),
 .ev-data-table td:nth-child(8) {
-  min-width: 180px; /* Model */
+  min-width: 200px; /* Model */
 }
 
 .ev-data-table th:nth-child(9),
 .ev-data-table td:nth-child(9) {
-  min-width: 250px; /* Electric Vehicle Type */
+  min-width: 280px; /* Electric Vehicle Type */
 }
 
 .ev-data-table th:nth-child(10),
 .ev-data-table td:nth-child(10) {
-  min-width: 250px; /* CAFV Eligibility */
+  min-width: 280px; /* CAFV Eligibility */
 }
 
 /* Remove the last column's right border */
@@ -163,7 +169,7 @@
 
 /* Header Cell Styling */
 .ev-data-table th {
-  position: relative; /* Needed for the pseudo-element */
+  position: relative; 
   background-color: #f7f7f7;
   color: #333;
   font-weight: 600;
@@ -181,8 +187,8 @@
 .ev-data-table th::before {
   content: '';
   position: absolute;
-  top: 8px;  /* Adjust vertical position */
-  right: 8px; /* Adjust horizontal position */
+  top: 8px; 
+  right: 8px; 
   width: 0;
   height: 0;
   border-top: 10px solid #007bff; /* Triangle color */
@@ -191,12 +197,12 @@
 
 /* Remove Triangle Design for Summary Row Header Cells */
 .ev-data-table th.summary-row::before {
-  content: none; /* Remove triangle design */
+  content: none; 
 }
 
 /* Remove triangle design for summary card cells */
 .summary-card .card-cell::before {
-  content: none; /* Remove triangle design */
+  content: none; 
 }
 
 /* Popup for sorting */
@@ -210,10 +216,9 @@
   z-index: 1000;
   width: 180px;
   max-width: 250px;
-  margin-top: -10px;  /* Added margin to adjust positioning */
+  margin-top: 500px;  
 }
 
-/* Add a bit of space around the popup */
 .sort-popup button {
   width: 100%;
   padding: 10px;
@@ -254,28 +259,28 @@
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
-  width: 45%; /* Make buttons take equal width */
+  width: 45%; 
 }
 
 /* Reset Button - Red Color */
 .popup-buttons .reset-button {
-  background-color: #e74c3c;  /* Red */
+  background-color: #e74c3c; 
   color: white;
 }
 
 .popup-buttons .reset-button:hover {
-  background-color: #c0392b;  /* Darker red on hover */
-  transform: scale(1.05); /* Slight zoom effect */
+  background-color: #c0392b;
+  transform: scale(1.05);
 }
 
 /* Apply Button - Blue Color */
 .popup-buttons .apply-button {
-  background-color: #3498db;  /* Blue */
+  background-color: #3498db;
   color: white;
 }
 
 .popup-buttons .apply-button:hover {
-  background-color: #2980b9;  /* Darker blue on hover */
+  background-color: #2980b9; 
   transform: scale(1.05);
 }
 
@@ -290,15 +295,16 @@
   font-weight: bold;
 }
 
-/* Updated summary card cell styles */
+/* Updated summary card cell styles for full content visibility */
 .summary-card .card-cell {
-  padding: 70px 80px; /* Increased padding for more space inside each card cell */
-  margin: 15px 0; /* Added margin between cells for spacing */
+  padding: 50px 60px;
+  margin: 15px 0;
   background-color: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 5px;
-  word-wrap: break-word;
-  white-space: normal; /* Allow text to wrap inside the cell */
-  overflow: hidden;
-  min-height: 150px; /* Increased minimum height for more space */
+  font-size: 16px;
+  word-wrap: break-word; 
+  white-space: normal; 
+  overflow: visible; 
+  min-height: 180px; 
 }
